@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">UGD5_A_9969</string>
+    <string name="tittle">Aplikasi</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="btnSign_Up">Sign Up</string>
+    <string name="btnSign_In">Sign In</string>
+    <string name="logout">Log Out</string>
+</resources>
