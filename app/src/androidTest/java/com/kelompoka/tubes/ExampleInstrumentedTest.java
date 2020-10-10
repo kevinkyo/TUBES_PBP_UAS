@@ -1,4 +1,4 @@
-package com.frengkianggoro.ugd5_a_9969;
+package com.kelompoka.tubes;
 
 import android.content.Context;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.frengkianggoro.ugd5_a_9969", appContext.getPackageName());
+        assertEquals("com.kelompoka.ugd5_a_9969", appContext.getPackageName());
     }
 }

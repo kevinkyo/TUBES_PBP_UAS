@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+    tools:context=".MenuActivity"
+    android:orientation="vertical">
+
+    <TextView
+        android:text="@string/menu"
+        style="@style/TextAppearance.MaterialComponents.Headline3"
+        android:textAlignment="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+    <Button
+        android:id="@+id/btn_murid"
+        android:text="@string/murid"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:drawableLeft="@drawable/ic_student"
+        android:backgroundTint="#00BCD4"
+        android:layout_width="350dp"
+        android:layout_height="100dp" />
+
+    <Button
+        android:id="@+id/btn_guru"
+        android:text="@string/guru"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:drawableLeft="@drawable/ic_teacher"
+        android:backgroundTint="#00BCD4"
+        android:layout_width="350dp"
+        android:layout_height="100dp" />
+
+    <Button
+        android:id="@+id/btn_geo"
+        android:text="@string/geolocation"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:drawableLeft="@drawable/ic_map"
+        android:backgroundTint="#00BCD4"
+        android:layout_width="350dp"
+        android:layout_height="100dp" />
+
+    <Button
+        android:id="@+id/btn_about_us"
+        android:text="@string/about_us"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:drawableLeft="@drawable/ic_leader"
+        android:backgroundTint="#00BCD4"
+        android:layout_width="350dp"
+        android:layout_height="100dp" />
+
+    <Button
+        android:id="@+id/btn_logout"
+        android:text="@string/logout"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:drawableLeft="@drawable/ic_logout"
+        android:backgroundTint="#00BCD4"
+        android:layout_width="350dp"
+        android:layout_height="100dp" />
+
+</LinearLayout>

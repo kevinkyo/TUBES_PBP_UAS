@@ -1,4 +1,4 @@
-package com.frengkianggoro.ugd5_a_9969;
+package com.kelompoka.tubes;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,8 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -22,7 +21,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
     TextInputEditText inputEmail,inputPassword;
@@ -97,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                                         Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_LONG).show();
                                         createNotificationChannel();
                                         addNotification();
-                                        Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
+                                        Intent intent = new Intent(MainActivity.this, MenuActivity.class);
                                         startActivity(intent);
                                     } else {
                                         Toast.makeText(MainActivity.this, "Authentication Failed.",Toast.LENGTH_SHORT).show();
