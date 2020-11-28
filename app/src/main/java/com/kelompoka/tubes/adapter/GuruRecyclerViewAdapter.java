@@ -20,7 +20,7 @@ import com.kelompoka.tubes.model.Guru;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GuruRecyclerViewAdapter extends RecyclerView.Adapter<GuruRecyclerViewAdapter.UserViewHolder> implements Filterable {
+public class GuruRecyclerViewAdapter extends RecyclerView.Adapter<GuruRecyclerViewAdapter.UserViewHolder>  {
 
     private Context context;
     private List<Guru> guruList;
@@ -81,6 +81,8 @@ public class GuruRecyclerViewAdapter extends RecyclerView.Adapter<GuruRecyclerVi
         }
     }
 
+
+/*
     @Override
     public Filter getFilter() {
         return userListFilter;
@@ -116,6 +118,8 @@ public class GuruRecyclerViewAdapter extends RecyclerView.Adapter<GuruRecyclerVi
             notifyDataSetChanged();
         }
     };
+
+ */
 }
 
 

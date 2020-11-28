@@ -1,5 +1,6 @@
 package com.kelompoka.tubes;
 
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,10 +17,25 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.kelompoka.tubes.API.StudentAPI;
 import com.kelompoka.tubes.database.DatabaseClient;
 import com.kelompoka.tubes.model.Student;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.shashank.sony.fancytoastlib.FancyToast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.android.volley.Request.Method.POST;
 
 
 public class AddStudentFragment extends Fragment {
@@ -84,10 +100,14 @@ public class AddStudentFragment extends Fragment {
                 }
 
                 else{
-                    addUser();
-                    Toast.makeText(getActivity().getApplicationContext(), "Student Saved", Toast.LENGTH_SHORT).show();
-                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.hide(AddStudentFragment.this).commit();
+
+                    final String name = nameText.getText().toString();
+                    final String kelas = kelasText.getText().toString();
+                    final int age = Integer.valueOf(ageText.getText().toString());
+                    final String alamat = alamatText.getText().toString();
+
+                    tambahStudent(name, kelas, age, alamat);
+
                 }
 
             }
@@ -101,6 +121,57 @@ public class AddStudentFragment extends Fragment {
         });
     }
 
+    public void tambahStudent(final String name, final String kelas, final int age, final String alamat)
+    {
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+
+
+        StringRequest stringRequest = new StringRequest(POST, StudentAPI.URL_ADD, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    JSONObject obj = new JSONObject(response);
+                    if(obj.getString("message").equalsIgnoreCase("Add Student Success"))
+                    {
+                        FancyToast.makeText(getContext(),"Student Saved",
+                                FancyToast.LENGTH_SHORT, FancyToast.INFO,false).show();
+
+                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                        transaction.hide(AddStudentFragment.this).commit();
+                    }
+
+                    FancyToast.makeText(getContext(),obj.getString("message"),
+                            FancyToast.LENGTH_SHORT, FancyToast.INFO,false).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                FancyToast.makeText(getContext(),error.getMessage(),
+                        FancyToast.LENGTH_SHORT, FancyToast.INFO,false).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String>  params = new HashMap<String, String>();
+                params.put("name", name);
+                params.put("kelas", kelas);
+                params.put("age", String.valueOf(age));
+                params.put("alamat", alamat);
+
+                return params;
+            }
+        };
+
+        queue.add(stringRequest);
+    }
+
+    /*
     private void addUser(){
 
         final String name = nameText.getText().toString();
@@ -127,5 +198,5 @@ public class AddStudentFragment extends Fragment {
         AddUser add = new AddUser();
         add.execute();
     }
-
+*/
 }

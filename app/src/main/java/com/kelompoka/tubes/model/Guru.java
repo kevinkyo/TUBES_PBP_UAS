@@ -20,6 +20,15 @@ public class Guru implements Serializable {
     @ColumnInfo(name = "age")
     public int age;
 
+    public Guru() {
+    }
+
+    public Guru(int id, String number, String fullName, int age) {
+        this.id = id;
+        this.number = number;
+        this.fullName = fullName;
+        this.age = age;
+    }
 
     public int getId() {
         return id;

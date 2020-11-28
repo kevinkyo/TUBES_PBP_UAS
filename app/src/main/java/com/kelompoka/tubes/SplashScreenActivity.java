@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 public class SplashScreenActivity extends AppCompatActivity {
-    private int waktu_loading=4000, cekTema;
+    private int waktu_loading=2000, cekTema;
 
     SharedPreferences sharedPreferences;
     //4000=4 detik

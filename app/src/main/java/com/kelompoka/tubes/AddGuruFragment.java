@@ -16,10 +16,26 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.kelompoka.tubes.API.GuruAPI;
+import com.kelompoka.tubes.API.StudentAPI;
 import com.kelompoka.tubes.database.DatabaseClient;
 import com.kelompoka.tubes.model.Guru;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.shashank.sony.fancytoastlib.FancyToast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.android.volley.Request.Method.POST;
 
 
 public class AddGuruFragment extends Fragment {
@@ -78,10 +94,12 @@ public class AddGuruFragment extends Fragment {
                 }
 
                 else{
-                    addUser();
-                    Toast.makeText(getActivity().getApplicationContext(), "Guru Saved", Toast.LENGTH_SHORT).show();
-                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.hide(AddGuruFragment.this).commit();
+                    final String name = nameText.getText().toString();
+                    final String number = numberText.getText().toString();
+                    final int age = Integer.valueOf(ageText.getText().toString());
+                    tambahGuru(number, name, age);
+
+
                 }
 
             }
@@ -95,11 +113,57 @@ public class AddGuruFragment extends Fragment {
         });
     }
 
+    public void tambahGuru(final String number, final String fullname, final int age)
+    {
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+
+
+        StringRequest stringRequest = new StringRequest(POST, GuruAPI.URL_ADD, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    JSONObject obj = new JSONObject(response);
+                    if(obj.getString("message").equalsIgnoreCase("Add Guru Success"))
+                    {
+                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                        transaction.hide(AddGuruFragment.this).commit();
+                    }
+
+                    FancyToast.makeText(getContext(),obj.getString("message"),
+                            FancyToast.LENGTH_SHORT, FancyToast.INFO,false).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                FancyToast.makeText(getContext(),error.getMessage(),
+                        FancyToast.LENGTH_SHORT, FancyToast.INFO,false).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String>  params = new HashMap<String, String>();
+                params.put("number", number);
+                params.put("fullname", fullname);
+                params.put("age", String.valueOf(age));
+
+
+                return params;
+            }
+        };
+
+        queue.add(stringRequest);
+    }
+
+/*
     private void addUser(){
 
-        final String name = nameText.getText().toString();
-        final String number = numberText.getText().toString();
-        final int age = Integer.valueOf(ageText.getText().toString());
+
 
         class AddUser extends AsyncTask<Void, Void, Void> {
 
@@ -119,5 +183,7 @@ public class AddGuruFragment extends Fragment {
         AddUser add = new AddUser();
         add.execute();
     }
+
+ */
 
 }

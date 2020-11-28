@@ -75,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+                startActivity(intent);
                 String email = inputEmail.getText().toString();
                 String password= inputPassword.getText().toString();
                 if(email.isEmpty() || !email.contains("@")){

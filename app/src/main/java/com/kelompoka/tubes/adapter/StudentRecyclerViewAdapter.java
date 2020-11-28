@@ -20,7 +20,7 @@ import com.kelompoka.tubes.model.Student;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StudentRecyclerViewAdapter extends RecyclerView.Adapter<StudentRecyclerViewAdapter.UserViewHolder> implements Filterable {
+public class StudentRecyclerViewAdapter extends RecyclerView.Adapter<StudentRecyclerViewAdapter.UserViewHolder> {
 
     private Context context;
     private List<Student> studentList;
@@ -82,7 +82,7 @@ public class StudentRecyclerViewAdapter extends RecyclerView.Adapter<StudentRecy
                     .commit();
         }
     }
-
+/*
     @Override
     public Filter getFilter() {
         return userListFilter;
@@ -118,6 +118,8 @@ public class StudentRecyclerViewAdapter extends RecyclerView.Adapter<StudentRecy
             notifyDataSetChanged();
         }
     };
+
+ */
 }
 
 

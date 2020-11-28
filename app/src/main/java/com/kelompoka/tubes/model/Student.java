@@ -23,6 +23,17 @@ public class Student implements Serializable {
     @ColumnInfo(name="alamat")
     public String alamat;
 
+    public Student() {
+    }
+
+    public Student(int id, String name, String kelas, int age, String alamat) {
+        this.id = id;
+        this.name = name;
+        this.kelas = kelas;
+        this.age = age;
+        this.alamat = alamat;
+    }
+
     public int getId() {
         return id;
     }
