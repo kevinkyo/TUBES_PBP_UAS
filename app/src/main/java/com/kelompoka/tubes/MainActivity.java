@@ -3,6 +3,7 @@ package com.kelompoka.tubes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -16,14 +17,30 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.kelompoka.tubes.API.GuruAPI;
+import com.kelompoka.tubes.API.UserAPI;
+import com.shashank.sony.fancytoastlib.FancyToast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.android.volley.Request.Method.POST;
 
 public class MainActivity extends AppCompatActivity {
-    TextInputEditText inputEmail,inputPassword;
+    TextInputEditText inputEmail,inputPassword, inputNama;
     Button btnSignIn,btnSignUp;
     private FirebaseAuth mAuth;
 //    private static final String TAG = "EmailPassword";
@@ -34,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        inputNama = findViewById(R.id.inputNama);
         inputEmail = findViewById(R.id.inputEmail);
         inputPassword = findViewById(R.id.inputPassword);
         btnSignIn = findViewById(R.id.btn_sign_in);
@@ -46,16 +64,29 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String email = inputEmail.getText().toString();
                 String password= inputPassword.getText().toString();
+                String nama= inputNama.getText().toString();
                 if(email.isEmpty() || !email.contains("@")){
-                    Toast.makeText(MainActivity.this, "Email Invalid", Toast.LENGTH_SHORT).show();
+                    FancyToast.makeText(MainActivity.this,"Email Invalid",
+                            FancyToast.LENGTH_SHORT, FancyToast.INFO,false).show();
+                }
+                else if(nama.isEmpty()){
+                    FancyToast.makeText(MainActivity.this,"Please Enter Nama",
+                            FancyToast.LENGTH_SHORT, FancyToast.INFO,false).show();
                 }
                 else if(password.isEmpty()){
-                    Toast.makeText(MainActivity.this, "Please enter Password", Toast.LENGTH_SHORT).show();
+                    FancyToast.makeText(MainActivity.this,"Please Enter Password",
+                            FancyToast.LENGTH_SHORT, FancyToast.INFO,false).show();
+
                 }
                 else if(password.length()<6){
-                    Toast.makeText(MainActivity.this, "Password is too short", Toast.LENGTH_SHORT).show();
+                    FancyToast.makeText(MainActivity.this,"Password is too short",
+                            FancyToast.LENGTH_SHORT, FancyToast.INFO,false).show();
                 }
                 else{
+
+                    register( nama, email,  password);
+
+                    /*
                     mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -68,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
+
+                     */
                 }
             }
         });
@@ -75,20 +108,26 @@ public class MainActivity extends AppCompatActivity {
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-                startActivity(intent);
+
                 String email = inputEmail.getText().toString();
                 String password= inputPassword.getText().toString();
                 if(email.isEmpty() || !email.contains("@")){
-                    Toast.makeText(MainActivity.this, "Email Invalid", Toast.LENGTH_SHORT).show();
+                    FancyToast.makeText(MainActivity.this,"Email Invalid",
+                            FancyToast.LENGTH_SHORT, FancyToast.INFO,false).show();
                 }
                 else if(password.isEmpty()){
-                    Toast.makeText(MainActivity.this, "Please enter Password", Toast.LENGTH_SHORT).show();
+                    FancyToast.makeText(MainActivity.this,"Please Enter Password",
+                            FancyToast.LENGTH_SHORT, FancyToast.INFO,false).show();
                 }
                 else if(password.length()<6){
-                    Toast.makeText(MainActivity.this, "Password is too short", Toast.LENGTH_SHORT).show();
+                    FancyToast.makeText(MainActivity.this,"Password is too short",
+                            FancyToast.LENGTH_SHORT, FancyToast.INFO,false).show();
                 }
                 else{
+
+                    login(email, password);
+
+                    /*
                     mAuth.signInWithEmailAndPassword(email, password)
                             .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
@@ -106,10 +145,117 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 }
                             });
+
+                     */
                 }
             }
         });
     }
+
+    public void register( String nama,  String email,  String password)
+    {
+        RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+
+
+        StringRequest stringRequest = new StringRequest(POST, UserAPI.URL_REGISTER, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    JSONObject obj = new JSONObject(response);
+                    if(obj.getString("message").equalsIgnoreCase("Register Success"))
+                    {
+                        FancyToast.makeText(MainActivity.this,obj.getString("message"),
+                                FancyToast.LENGTH_SHORT, FancyToast.INFO,false).show();
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                FancyToast.makeText(MainActivity.this,error.getMessage(),
+                        FancyToast.LENGTH_SHORT, FancyToast.INFO,false).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String>  params = new HashMap<String, String>();
+                params.put("name", nama);
+                params.put("email", email);
+                params.put("password", password);
+                return params;
+            }
+        };
+
+        queue.add(stringRequest);
+    }
+
+    public void login( String email,  String password)
+    {
+        RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+
+
+        StringRequest stringRequest = new StringRequest(POST, UserAPI.URL_LOGIN, new Response.Listener<String>()
+        {
+            @Override
+            public void onResponse(String response)
+            {
+                try
+                {
+                    JSONObject obj = new JSONObject(response);
+                    if(obj.getString("message").equalsIgnoreCase("Authenticated"))
+                    {
+                        JSONObject userObj = obj.getJSONObject("user");
+                        FancyToast.makeText(MainActivity.this,obj.getString("message"),
+                                FancyToast.LENGTH_SHORT, FancyToast.INFO,false).show();
+                        createNotificationChannel();
+                        addNotification();
+                        startActivity(new Intent(MainActivity.this, MenuActivity.class));
+                    }
+                    else
+                    {
+                        FancyToast.makeText(MainActivity.this,obj.getString("message"),
+                                FancyToast.LENGTH_SHORT, FancyToast.INFO,false).show();
+                    }
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError e)
+            {
+
+                FancyToast.makeText(MainActivity.this,e.getMessage(),
+                        FancyToast.LENGTH_SHORT, FancyToast.INFO,false).show();
+            }
+        })
+        {
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String>  params = new HashMap<String, String>();
+
+                params.put("email", email);
+                params.put("password", password);
+
+                return params;
+            }
+        };
+
+        queue.add(stringRequest);
+    }
+
 
     private void addNotification() {
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
