@@ -1,7 +1,7 @@
 package com.kelompoka.tubes.API;
 
 public class StudentAPI {
-    public static final String ROOT_URL   = "https://e3f9684a314f.ngrok.io/";
+    public static final String ROOT_URL   = "https://sekolah.apitubespbp.xyz/";
     public static final String ROOT_API   = ROOT_URL+ "api/";
     public static final String URL_IMAGE  = ROOT_URL+"images/";
     //Tambahkan api buku disini
